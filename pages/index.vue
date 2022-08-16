@@ -1,9 +1,14 @@
 <template>
-  <Tutorial/>
+  <Tutorial />
 </template>
 
 <script>
 export default {
-  name: 'IndexPage'
-}
+  name: "IndexPage",
+  mounted() {
+    this.$axios.$get("product").then((res) => {
+      console.log(res);
+    });
+  },
+};
 </script>
