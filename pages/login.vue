@@ -2,7 +2,7 @@
   <div>
     <FormInput label="email" v-model="login.email" />
     <FormInput label="password" v-model="login.password" />
-    <button class="bg-gray text white p-2" @click="handleLogin()">Login</button>
+    <button class="btn" @click="handleLogin()">Login</button>
   </div>
 </template>
 

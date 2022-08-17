@@ -16,7 +16,6 @@ export const mutations = {
     state.products.push(payload);
     state.totalPrice += payload.price;
     state.totalProducts += 1;
-    console.log(state);
     Cookies.set(
       "cart",
       JSON.stringify({

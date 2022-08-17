@@ -1,6 +1,9 @@
 <template lang="">
   <div>
-    <div>{{ cart.totalProducts }} Product(s): {{ cart.totalPrice }}</div>
+    <div>
+      {{ cart.totalProducts }} Product(s):
+      {{ cart.totalPrice | dollarFormat() }}
+    </div>
   </div>
 </template>
 <script>

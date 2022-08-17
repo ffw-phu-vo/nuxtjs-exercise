@@ -1,5 +1,6 @@
 <template>
   <div class="container mx-auto">
+    <NuxtLink to="/product-list"> Back to List </NuxtLink>
     <h1 class="text-2xl font-bold mb-3">Edit Product {{ id }}</h1>
     <div class="product-edit">
       <div class="mb-5">
@@ -20,20 +21,10 @@
         <FormTextarea label="description" v-model="description" />
       </div>
 
-      <button
-        v-if="id == 0"
-        class="bg-gray text white p-2"
-        @click="handleSubmit('create')"
-      >
+      <button v-if="id == 0" class="btn" @click="handleSubmit('create')">
         Create
       </button>
-      <button
-        v-else
-        class="bg-gray text white p-2"
-        @click="handleSubmit('update')"
-      >
-        Update
-      </button>
+      <button v-else class="btn" @click="handleSubmit('update')">Update</button>
     </div>
   </div>
 </template>

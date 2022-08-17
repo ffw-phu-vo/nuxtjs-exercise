@@ -2,7 +2,7 @@
   <div class="mb-5">
     <label>{{ label }}</label>
     <input
-      class="border border-black p-2"
+      class=""
       type="text"
       v-bind:value="value"
       v-on:input="$emit('input', $event.target.value)"
