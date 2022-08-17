@@ -22,6 +22,7 @@ export default {
     "~/plugins/vue-axios.js",
     "~/plugins/vue-format.js",
     "~/plugins/vue-fontawesome.js",
+    { src: "~/plugins/vue-js-modal", mode: "client" },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

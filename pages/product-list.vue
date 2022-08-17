@@ -12,7 +12,7 @@
         </div>
       </div>
     </div>
-    <div className="product-list__list m-5">
+    <div v-if="items.length > 0" className="product-list__list m-5">
       <table>
         <thead>
           <tr>
@@ -50,20 +50,32 @@
               <NuxtLink :to="`/product/edit/${item.productId}`">
                 <font-awesome-icon icon="fa-pencil-alt" />
               </NuxtLink>
-              <font-awesome-icon icon="fa-trash" />
+
+              <button class="link" @click="handleOpenModal(item.productId)">
+                <font-awesome-icon icon="fa-trash" />
+              </button>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
+    <modal name="my-modal">
+      <div class="modal-content">
+        <h2>It work's!</h2>
+
+        <button @click="$modal.hide('my-modal')">Cancel</button>
+        <button @click="handleDelete(deleteId)">Delete</button>
+      </div>
+    </modal>
   </div>
 </template>
 
 <script>
 export default {
-  name: "Product List",
+  name: "ProductList",
   data() {
     return {
+      deleteId: 0,
       items: [],
     };
   },
@@ -79,7 +91,22 @@ export default {
     const result = "?" + new URLSearchParams(query).toString();
     const payload = await this.$axios.$get(`/product${result}`);
     this.items = payload.data;
-    console.log(payload);
+  },
+  methods: {
+    handleOpenModal: function (productId) {
+      this.deleteId = productId;
+      this.$modal.show("my-modal");
+    },
+    handleDelete: function (productId) {
+      console.log(productId);
+      const nuxtContext = this;
+      if (productId != 0) {
+        this.$axios.$delete(`/product/${productId}`).then((res) => {
+          nuxtContext.$modal.hide("my-modal");
+          nuxtContext.$nuxt.refresh();
+        });
+      }
+    },
   },
 };
 </script>
