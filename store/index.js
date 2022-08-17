@@ -12,5 +12,8 @@ export const actions = {
     if (parsered.token) {
       storeContext.commit("auth/setLogin");
     }
+    if (parsered.cart) {
+      storeContext.commit("cart/setCart", JSON.parse(parsered.cart));
+    }
   },
 };
