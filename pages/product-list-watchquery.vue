@@ -147,12 +147,33 @@ export default {
   data() {
     return {
       deleteId: 0,
-      items: [],
-      totalPage: 0,
-      currentPage: 0,
+      // items: [],
+      // totalPage: 0,
+      // currentPage: 0,
     };
   },
-  async asyncData({ query }) {
+  // async asyncData({ query }) {
+  //   query = {
+  //     search: query.search ? query.search : "",
+  //     priceFrom: query.priceFrom ? query.priceFrom : "",
+  //     priceTo: query.priceTo ? query.priceTo : "",
+  //     orderBy: query.orderBy ? query.orderBy : "",
+  //     isAscending: query.isAscending ? query.isAscending : "true",
+  //     page: query.page ? query.page : 1,
+  //   };
+  //   console.log("asyncData", query);
+  //   return { query };
+  // },
+  // async fetch() {
+  //   console.log("fetch", this.query);
+  //   const result = "?" + new URLSearchParams(this.query).toString();
+  //   const payload = await this.$axios.$get(`/product${result}`);
+  //   // console.log(payload);
+  //   this.items = payload.data;
+  //   this.totalPage = Math.ceil(payload.total / payload.perPage);
+  //   this.currentPage = this.query.page;
+  // },
+  async asyncData({ query, $axios }) {
     query = {
       search: query.search ? query.search : "",
       priceFrom: query.priceFrom ? query.priceFrom : "",
@@ -162,16 +183,14 @@ export default {
       page: query.page ? query.page : 1,
     };
     console.log("asyncData", query);
-    return { query };
-  },
-  async fetch() {
-    console.log("fetch", this.query);
-    const result = "?" + new URLSearchParams(this.query).toString();
-    const payload = await this.$axios.$get(`/product${result}`);
+
+    const result = "?" + new URLSearchParams(query).toString();
+    const payload = await $axios.$get(`/product${result}`);
     // console.log(payload);
-    this.items = payload.data;
-    this.totalPage = Math.ceil(payload.total / payload.perPage);
-    this.currentPage = this.query.page;
+    const items = payload.data;
+    const totalPage = Math.ceil(payload.total / payload.perPage);
+    const currentPage = query.page;
+    return { query, totalPage, currentPage, items };
   },
   methods: {
     handleQuery: function (property) {
@@ -194,6 +213,14 @@ export default {
       }
     },
   },
+  watchQuery: [
+    "search",
+    "priceFrom",
+    "priceTo",
+    "orderBy",
+    "isAscending",
+    "page",
+  ],
   watch: {
     query: {
       handler: function (val, oldVal) {
@@ -201,7 +228,7 @@ export default {
       },
       deep: true,
     },
-    "$route.query": "$fetch",
+    // "$route.query": "$fetch",
   },
   computed: {
     arrowAsc: function () {
