@@ -1,11 +1,13 @@
 <template>
   <div class="page">
     <header>
-      <template v-if="isLoggedIn == true">
-        <button class="bg-gray text white p-2" @click="handleLogout()">
-          Logout
-        </button>
-      </template>
+      <div v-if="isLoggedIn == true">
+        <NuxtLink to="/product-list"> Product </NuxtLink>
+        <button class="btn" @click="handleLogout()">Logout</button>
+      </div>
+      <div v-else>
+        <NuxtLink to="/login"> Login</NuxtLink>
+      </div>
     </header>
     <Nuxt />
   </div>

@@ -18,9 +18,45 @@
           <tr>
             <th>Id</th>
             <th>Image</th>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Updated At</th>
+            <th>
+              <button
+                @click="
+                  handleQuery({
+                    orderBy: 'title',
+                    isAscending: query.isAscending == 'true' ? 'false' : 'true',
+                  })
+                "
+              >
+                Name
+                <span v-if="query.orderBy == 'title'" v-html="arrowAsc"></span>
+              </button>
+            </th>
+            <th>
+              <button
+                @click="
+                  handleQuery({
+                    orderBy: 'price',
+                    isAscending: query.isAscending == 'true' ? 'false' : 'true',
+                  })
+                "
+              >
+                Price
+                <span v-if="query.orderBy == 'price'" v-html="arrowAsc"></span>
+              </button>
+            </th>
+            <th>
+              <button
+                @click="
+                  handleQuery({
+                    orderBy: 'date',
+                    isAscending: query.isAscending == 'true' ? 'false' : 'true',
+                  })
+                "
+              >
+                Updated At
+                <span v-if="query.orderBy == 'date'" v-html="arrowAsc"></span>
+              </button>
+            </th>
             <th>Action</th>
           </tr>
         </thead>
@@ -58,13 +94,26 @@
           </tr>
         </tbody>
       </table>
+
+      <div className="product-list__pager m-5">
+        Pager{{ totalPage }}
+        <Pager
+          :totalPage="totalPage"
+          :currentPage="currentPage"
+          v-model="query.page"
+        />
+        {{ query.page }}
+      </div>
     </div>
+
     <modal name="my-modal">
-      <div class="modal-content">
+      <div class="modal-content text-center p-5">
         <h2>It work's!</h2>
 
-        <button @click="$modal.hide('my-modal')">Cancel</button>
-        <button @click="handleDelete(deleteId)">Delete</button>
+        <button class="btn ml-2" @click="$modal.hide('my-modal')">
+          Cancel
+        </button>
+        <button class="btn" @click="handleDelete(deleteId)">Delete</button>
       </div>
     </modal>
   </div>
@@ -77,22 +126,37 @@ export default {
     return {
       deleteId: 0,
       items: [],
+      totalPage: 0,
+      currentPage: 0,
     };
+  },
+  async asyncData({ query }) {
+    query = {
+      search: query.search ? query.search : "",
+      priceFrom: query.priceFrom ? query.priceFrom : "",
+      priceTo: query.priceTo ? query.priceTo : "",
+      orderBy: query.orderBy ? query.orderBy : "",
+      isAscending: query.isAscending ? query.isAscending : "true",
+      page: query.page ? query.page : 1,
+    };
+    console.log("asyncData", query);
+    return { query };
   },
   async fetch() {
-    const query = {
-      search: "",
-      priceFrom: "",
-      priceTo: "",
-      orderBy: "",
-      isAscending: "true",
-      page: 1,
-    };
-    const result = "?" + new URLSearchParams(query).toString();
+    console.log("fetch", this.query);
+    const result = "?" + new URLSearchParams(this.query).toString();
     const payload = await this.$axios.$get(`/product${result}`);
+    // console.log(payload);
     this.items = payload.data;
+    this.totalPage = Math.ceil(payload.total / payload.perPage);
+    this.currentPage = this.query.page;
   },
   methods: {
+    handleQuery: function (property) {
+      console.log(typeof this.query.isAscending);
+      console.log("property", property);
+      this.query = { ...this.query, ...property };
+    },
     handleOpenModal: function (productId) {
       this.deleteId = productId;
       this.$modal.show("my-modal");
@@ -106,6 +170,22 @@ export default {
           nuxtContext.$nuxt.refresh();
         });
       }
+    },
+  },
+  watch: {
+    query: {
+      handler: function (val, oldVal) {
+        this.$router.replace({ query: { ...this.query } });
+      },
+      deep: true,
+    },
+    "$route.query": "$fetch",
+  },
+  computed: {
+    arrowAsc: function () {
+      return this.query.isAscending == "true"
+        ? "&#160;&#8593;"
+        : "&#160;&#8595;";
     },
   },
 };
