@@ -3,7 +3,29 @@
     <div class="product-list__top m-5 flex flex-wrap">
       <div class="w-8/12">
         <h1 class="mb-4">Product List</h1>
-        <div className="product-list__search flex flex-wrap"></div>
+        <div className="product-list__search flex flex-wrap">
+          <span className="py-2">Search:</span>
+          <input
+            type="text"
+            v-model="query.searchText"
+            placeholder="Search Product name"
+            @input="handleQuery({ search: query.searchText })"
+          />
+          <span className="py-2">Price From:</span>
+          <input
+            type="text"
+            v-model="query.priceFrom"
+            placeholder="Search Product name"
+            @input="handleQuery({ search: query.priceFrom })"
+          />
+          <span className="py-2">To:</span>
+          <input
+            type="text"
+            v-model="query.priceTo"
+            placeholder="Search Product name"
+            @input="handleQuery({ search: query.priceTo })"
+          />
+        </div>
       </div>
       <div class="w-4/12">
         <CartTeaser />
