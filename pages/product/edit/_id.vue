@@ -52,14 +52,6 @@ export default {
       this.description = res.data.description;
     }
   },
-  // beforeMount() {
-  //   console.log(this.id);
-  // },
-  // mounted() {
-  //   this.$axios.$get(`/product/${this.id}`).then((res) => {
-  //     console.log(res.data);
-  //   });
-  // },
   methods: {
     handleSubmit: function (type) {
       const formData = new FormData();
