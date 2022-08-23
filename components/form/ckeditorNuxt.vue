@@ -12,37 +12,7 @@
 // https://blowstack.com/blog/ckeditor-5-nuxt-integration/
 let ClassicEditor;
 let CKEditor;
-// const uploadAdapter = (loader) => {
-//   return {
-//     upload: () => {
-//       return new Promise((resolve, reject) => {
-//         const body = new FormData();
-//         loader.file.then((file) => {
-//           body.append("media", file);
-//           body.append("title", file.name);
-//           httpClient
-//             .post("/media", body)
-//             .then((res) => {
-//               // console.log('finished', res.data.url);
-//               resolve({
-//                 default: `${res.data.url}`,
-//               });
-//             })
-//             .catch((err) => {
-//               reject(err);
-//             });
-//         });
-//       });
-//     },
-//   };
-// };
-
-// const uploadPlugin = (editor) => {
-//   console.log(123);
-//   editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
-//     return uploadAdapter(loader);
-//   };
-// };
+let VMaxios;
 
 if (process.client) {
   ClassicEditor = require("@ckeditor/ckeditor5-build-classic");
@@ -66,19 +36,14 @@ export default {
     };
   },
   mounted() {
-    // initial logic
-    // Event listener
-    // init javascript library
     console.log("2", this.$axios);
+    VMaxios = this.$axios;
     this.isloaded = true;
-    // this.editorConfig = {
-    //   extraPlugins: [uploadPlugin],
-    // };
   },
   methods: {
     uploadPlugin: function (editor) {
       // const axios = this;
-      console.log("1", process);
+      console.log("1", VMaxios);
       editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
         return {
           upload: () => {
@@ -88,12 +53,11 @@ export default {
               loader.file.then((file) => {
                 body.append("media", file);
                 body.append("title", file.name);
-                axios
-                  .$post("/media", body)
+                VMaxios.$post("/media", body)
                   .then((res) => {
                     console.log("finished", res);
                     resolve({
-                      default: `${res.data.url}`,
+                      default: `${res.url}`,
                     });
                   })
                   .catch((err) => {
