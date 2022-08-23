@@ -1,10 +1,12 @@
 <template>
-  <ckeditor
-    :editor="editor"
-    :config="{ extraPlugins: [uploadPlugin] }"
-    :value="value"
-    @input="(event) => $emit('input', event)"
-  />
+  <div v-if="isloaded == true">
+    <ckeditor
+      :editor="editor"
+      :config="{ extraPlugins: [uploadPlugin] }"
+      :value="value"
+      @input="(event) => $emit('input', event)"
+    />
+  </div>
 </template>
 <script>
 // https://blowstack.com/blog/ckeditor-5-nuxt-integration/
@@ -56,6 +58,7 @@ export default {
   props: ["value"],
   data() {
     return {
+      isloaded: false,
       editor: ClassicEditor,
       editorConfig: {
         // The configuration of the editor.
@@ -66,7 +69,8 @@ export default {
     // initial logic
     // Event listener
     // init javascript library
-    console.log("2", this);
+    console.log("2", this.$axios);
+    this.isloaded = true;
     // this.editorConfig = {
     //   extraPlugins: [uploadPlugin],
     // };
@@ -74,7 +78,7 @@ export default {
   methods: {
     uploadPlugin: function (editor) {
       // const axios = this;
-      console.log("1", this);
+      console.log("1", process);
       editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
         return {
           upload: () => {
