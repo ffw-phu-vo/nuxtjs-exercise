@@ -21,7 +21,7 @@
       </div>
       <div class="mb-5">
         <!-- <FormTextarea label="description" v-model="description" /> -->
-        <ckeditor-nuxt v-model="description" />
+        <FormCkeditorNuxt v-model="description" />
         <div v-html="description"></div>
       </div>
 
@@ -34,9 +34,7 @@
 </template>
 
 <script>
-import CkeditorNuxt from "@/components/form/ckeditorNuxt";
 export default {
-  components: { CkeditorNuxt },
   data() {
     return {
       id: 0,
