@@ -20,7 +20,9 @@
         />
       </div>
       <div class="mb-5">
-        <FormTextarea label="description" v-model="description" />
+        <!-- <FormTextarea label="description" v-model="description" /> -->
+        <ckeditor-nuxt v-model="description" />
+        <div v-html="description"></div>
       </div>
 
       <button v-if="id == 0" class="btn" @click="handleSubmit('create')">
@@ -32,7 +34,9 @@
 </template>
 
 <script>
+import CkeditorNuxt from "@/components/form/ckeditorNuxt";
 export default {
+  components: { CkeditorNuxt },
   data() {
     return {
       id: 0,
