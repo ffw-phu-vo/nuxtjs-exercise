@@ -1,6 +1,7 @@
 <template>
   <ckeditor
     :editor="editor"
+    :config="{ extraPlugins: [uploadPlugin] }"
     :value="value"
     @input="(event) => $emit('input', event)"
   />
@@ -9,37 +10,37 @@
 // https://blowstack.com/blog/ckeditor-5-nuxt-integration/
 let ClassicEditor;
 let CKEditor;
-const uploadAdapter = (loader) => {
-  return {
-    upload: () => {
-      return new Promise((resolve, reject) => {
-        const body = new FormData();
-        loader.file.then((file) => {
-          body.append("media", file);
-          body.append("title", file.name);
-          httpClient
-            .post("/media", body)
-            .then((res) => {
-              // console.log('finished', res.data.url);
-              resolve({
-                default: `${res.data.url}`,
-              });
-            })
-            .catch((err) => {
-              reject(err);
-            });
-        });
-      });
-    },
-  };
-};
+// const uploadAdapter = (loader) => {
+//   return {
+//     upload: () => {
+//       return new Promise((resolve, reject) => {
+//         const body = new FormData();
+//         loader.file.then((file) => {
+//           body.append("media", file);
+//           body.append("title", file.name);
+//           httpClient
+//             .post("/media", body)
+//             .then((res) => {
+//               // console.log('finished', res.data.url);
+//               resolve({
+//                 default: `${res.data.url}`,
+//               });
+//             })
+//             .catch((err) => {
+//               reject(err);
+//             });
+//         });
+//       });
+//     },
+//   };
+// };
 
-const uploadPlugin = (editor) => {
-  console.log(123);
-  editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
-    return uploadAdapter(loader);
-  };
-};
+// const uploadPlugin = (editor) => {
+//   console.log(123);
+//   editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
+//     return uploadAdapter(loader);
+//   };
+// };
 
 if (process.client) {
   ClassicEditor = require("@ckeditor/ckeditor5-build-classic");
@@ -66,40 +67,40 @@ export default {
     // Event listener
     // init javascript library
     console.log("2", this);
-    this.editorConfig = {
-      extraPlugins: [uploadPlugin],
-    };
+    // this.editorConfig = {
+    //   extraPlugins: [uploadPlugin],
+    // };
   },
   methods: {
-    // uploadPlugin: function (editor) {
-    //   // const axios = this;
-    //   console.log("1", this);
-    //   editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
-    //     return {
-    //       upload: () => {
-    //         // console.log("2", axios);
-    //         return new Promise((resolve, reject) => {
-    //           const body = new FormData();
-    //           loader.file.then((file) => {
-    //             body.append("media", file);
-    //             body.append("title", file.name);
-    //             axios
-    //               .$post("/media", body)
-    //               .then((res) => {
-    //                 console.log("finished", res);
-    //                 resolve({
-    //                   default: `${res.data.url}`,
-    //                 });
-    //               })
-    //               .catch((err) => {
-    //                 reject(err);
-    //               });
-    //           });
-    //         });
-    //       },
-    //     };
-    //   };
-    // },
+    uploadPlugin: function (editor) {
+      // const axios = this;
+      console.log("1", this);
+      editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
+        return {
+          upload: () => {
+            // console.log("2", axios);
+            return new Promise((resolve, reject) => {
+              const body = new FormData();
+              loader.file.then((file) => {
+                body.append("media", file);
+                body.append("title", file.name);
+                axios
+                  .$post("/media", body)
+                  .then((res) => {
+                    console.log("finished", res);
+                    resolve({
+                      default: `${res.data.url}`,
+                    });
+                  })
+                  .catch((err) => {
+                    reject(err);
+                  });
+              });
+            });
+          },
+        };
+      };
+    },
   },
 };
 </script>
