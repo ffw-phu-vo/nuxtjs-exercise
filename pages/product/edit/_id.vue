@@ -21,7 +21,7 @@
       </div>
       <div class="mb-5">
         <!-- <FormTextarea label="description" v-model="description" /> -->
-        <FormCkeditorNuxt v-model="description" />
+        <FormCustomCkeditor v-model="description" />
         <div v-html="description"></div>
       </div>
 
