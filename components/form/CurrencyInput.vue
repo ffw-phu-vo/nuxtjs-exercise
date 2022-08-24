@@ -14,6 +14,9 @@ export default {
   setup(props) {
     const { inputRef } = useCurrencyInput({
       currency: "USD",
+      hideCurrencySymbolOnFocus: false,
+      hideGroupingSeparatorOnFocus: false,
+      hideNegligibleDecimalDigitsOnFocus: false,
     });
 
     return { inputRef };
