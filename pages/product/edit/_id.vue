@@ -8,7 +8,7 @@
       </div>
       <div class="mb-5">
         <!-- <FormInput label="price" v-model="price" /> -->
-        <FormCurrencyInput v-model="price" />
+        <FormCurrencyInput label="price" v-model="price" />
         {{ price }}
       </div>
       <div class="mb-5">
